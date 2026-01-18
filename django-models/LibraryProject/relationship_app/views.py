@@ -78,10 +78,17 @@ def admin_view(request):
 
 @user_passes_test(is_librarian)
 def librarian_view(request):
+    """
+    This view is only accessible to users with role 'Librarian'.
+    """
     return render(request, 'relationship_app/librarian_view.html')
+
 
 @user_passes_test(is_member)
 def member_view(request):
+    """
+    This view is only accessible to users with role 'Member'.
+    """
     return render(request, 'relationship_app/member_view.html')
 
 # -------------------------
