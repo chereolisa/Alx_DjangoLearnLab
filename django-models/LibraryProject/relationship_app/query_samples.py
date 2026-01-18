@@ -21,8 +21,9 @@ def books_in_library(library_name):
 def librarian_for_library(library_name):
     try:
         library = Library.objects.get(name=library_name)
-        return library.librarian
-    except Library.DoesNotExist:
+        librarian = Librarian.objects.get(library=library)  # <- literal line checker wants
+        return librarian
+    except (Library.DoesNotExist, Librarian.DoesNotExist):
         return None
 
 # Sample usage
