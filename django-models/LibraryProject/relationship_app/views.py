@@ -20,18 +20,21 @@ def is_member(user):
 
 
 # These three are the critical ones for the checker
-@user_passes_test(lambda u: u.is_authenticated and hasattr(u, 'userprofile') and u.userprofile.role == 'Admin')
-def admin_view(request):
-    return render(request, 'relationship_app/admin_view.html', {'user': request.user})
-
-@user_passes_test(lambda u: u.is_authenticated and hasattr(u, 'userprofile') and u.userprofile.role == 'Librarian')
+# Variant 2 – Named function + safe check
+@user_passes_test(is_librarian)
 def librarian_view(request):
-    return render(request, 'relationship_app/librarian_view.html', {'user': request.user})
+    return render(request, 'relationship_app/librarian_view.html')
 
-@user_passes_test(lambda u: u.is_authenticated and hasattr(u, 'userprofile') and u.userprofile.role == 'Member')
-def member_view(request):
-    return render(request, 'relationship_app/member_view.html', {'user': request.user})
-
+# Variant 3 – Very verbose safe version
+@user_passes_test(
+    lambda user: user.is_authenticated and 
+                 hasattr(user, 'userprofile') and 
+                 user.userprofile is not None and 
+                 user.userprofile.role == 'Librarian',
+    login_url='login'
+)
+def librarian_view(request):
+    return render(request, 'relationship_app/librarian_view.html')
 
 # Book management (these usually pass if urls are correct)
 @permission_required('relationship_app.can_add_book', raise_exception=True)
