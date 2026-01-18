@@ -67,10 +67,11 @@ def is_admin(user):
     return hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
 
 def is_librarian(user):
-    return hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
+    return user.userprofile.role == 'Librarian'
 
 def is_member(user):
-    return hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
+    return user.userprofile.role == 'Member'
+
 
 @user_passes_test(is_admin)
 def admin_view(request):
